@@ -1,0 +1,20 @@
+<table>
+  <% @board.each_row_with_index do |row, row_index| %>
+    <tr>
+      <% row.each_with_index do |cell, cell_index| %>
+        <td>
+          <% if (cell.symbol == nil) %>
+            <form action="/new_game" method="POST">
+              <input type="hidden" name="move" value="<%= cell_index + (row_index*3) %>" />
+              <input type="submit" value="<%= '___' %>" />
+            </form>
+          <% else %>
+            <form action="/new_game" method="POST">
+              <input type="submit" value="<%= 'X' %>" readonly />
+            </form>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
