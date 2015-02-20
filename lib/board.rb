@@ -1,4 +1,4 @@
-module TicTacToe
+# module TicTacToe
   BOARD_SIZE = 3
 
   class Board
@@ -6,23 +6,23 @@ module TicTacToe
 
     def initialize(size = BOARD_SIZE, cells=nil)
       @size = size
-      @cells = cells || Array.new(size*size) {nil}
+      @cells = cellify(cells || Array.new(size*size) {nil})
     end
 
     def get_cell(cell_number)
-      cells[cell_number-1]
+      cells[cell_number-1].symbol
     end
 
     def set_cell(cell_number, player_mark)
-      cells[cell_number-1] = player_mark
+      cells[cell_number-1].symbol = player_mark
     end
 
     def remove_mark(cell_number)
-      cells[cell_number-1] = nil
+      cells[cell_number-1].symbol = nil
     end
 
     def empty_cell?(cell_number)
-      cells[cell_number-1] == nil
+      cells[cell_number-1].symbol == nil
     end
 
     def empty_cells
@@ -33,9 +33,9 @@ module TicTacToe
 
     def get_winning_mark
       winning_solutions.each do |solution|
-        cell1 = cells[solution[0]-1]
-        cell2 = cells[solution[1]-1]
-        cell3 = cells[solution[2]-1]
+        cell1 = cells[solution[0]-1].symbol
+        cell2 = cells[solution[1]-1].symbol
+        cell3 = cells[solution[2]-1].symbol
         if cell1 == cell2 && cell1 == cell3 && cell1 != nil
           return cell1
         end
@@ -52,11 +52,17 @@ module TicTacToe
     end
 
     def empty?
-      cells.all? {|cell| cell.nil?}
+      cells.all? {|cell| cell.symbol.nil?}
     end
 
     def over?
       winner? || tie_game?
+    end
+
+    Cell = Struct.new(:symbol)
+
+    def cellify(data)
+      data.map {|symbol| Cell.new(symbol)}
     end
 
     private
@@ -72,7 +78,7 @@ module TicTacToe
     end
 
     def full?
-      cells.none? {|cell| cell.nil?}
+      cells.none? {|cell| cell.symbol.nil?}
     end
   end
-end
+# end
