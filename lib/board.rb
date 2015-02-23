@@ -28,7 +28,7 @@ module TicTacToe
 
     def empty_cells
       available_cells = []
-      cells.each_with_index {|cell, index| available_cells << (index + 1) if empty_cell?(index+1)}
+      cells.each {|cell| available_cells << (cell.index) if empty_cell?(cell.index)}
       available_cells
     end
 
@@ -68,6 +68,8 @@ module TicTacToe
       cells.map(&:symbol)
     end
 
+    Cell = Struct.new(:symbol, :index)
+
     private
 
     attr_accessor :board, :winning_solutions
@@ -81,7 +83,6 @@ module TicTacToe
     def cellify(data)
       data.each_with_index.map {|symbol, index| Cell.new(symbol, index)}
     end
-
 
     def winning_solutions
       self.winning_solutions = [
