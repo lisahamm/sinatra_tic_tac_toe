@@ -1,17 +1,13 @@
-# module TicTacToe
-  # BOARD_SIZE = 3
+module TicTacToe
+  BOARD_SIZE = 3
 
   class Board
     attr_accessor :cells, :size
 
     def initialize(options)
-      options = defaults.merge!(options)
+      options = defaults.merge(options)
       @size = options[:size]
       @cells = cellify(options[:cells] || Array.new(size*size) {nil})
-    end
-
-    def defaults
-      {cells: []}
     end
 
     def get_cell(cell_number)
@@ -68,20 +64,24 @@
       cells.each_slice(3) {|group| yield group}
     end
 
+    def to_array
+      cells.map(&:symbol)
+    end
+
+    private
+
+    attr_accessor :board, :winning_solutions
+
+    def defaults
+      {size: BOARD_SIZE, cells: nil}
+    end
+
     Cell = Struct.new(:symbol, :index)
 
     def cellify(data)
       data.each_with_index.map {|symbol, index| Cell.new(symbol, index)}
     end
 
-    def to_array
-      cells.map(&:symbol)
-    end
-
-
-    private
-
-    attr_accessor :board, :winning_solutions
 
     def winning_solutions
       self.winning_solutions = [
@@ -95,4 +95,4 @@
       cells.none? {|cell| cell.symbol.nil?}
     end
   end
-# end
+end

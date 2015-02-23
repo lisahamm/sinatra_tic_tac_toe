@@ -14,7 +14,7 @@ end
 
 get '/game' do
   @player_mark = session[:mark]
-  @board = Board.new(session[:moves])
+  @board = Board.new(cells: session[:moves])
   session[:moves] = @board.symbols_to_array
   erb :board
 end
