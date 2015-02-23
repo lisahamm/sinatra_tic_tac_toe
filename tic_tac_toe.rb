@@ -13,7 +13,6 @@ post '/mark' do
 end
 
 get '/game' do
-  @player_mark = session[:mark]
   @board = TicTacToe::Board.new(cells: session[:moves])
   session[:moves] = @board.to_array
   erb :board

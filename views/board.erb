@@ -1,7 +1,3 @@
-<h1>Tic Tac Toe</h1>
-
-<h3><%= @player_mark %></h3>
-
 <div class="board">
   <% @board.each_row do |row| %>
     <div class="row">
@@ -9,11 +5,11 @@
           <% if (cell.symbol == nil) %>
             <form action="/make_move" method="POST">
               <input type="hidden" name="move" value="<%= cell.index %>" />
-              <input type="submit" value="___" />
+              <input id="cell-btn" type="submit" value="___" />
             </form>
           <% else %>
             <form action="/make_move" method="POST">
-              <input type="submit" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
+              <input id="cell-btn" type="submit" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
             </form>
           <% end %>
         </form>
