@@ -1,28 +1,33 @@
 # module TicTacToe
-  BOARD_SIZE = 3
+  # BOARD_SIZE = 3
 
   class Board
     attr_accessor :cells, :size
 
-    def initialize(size = BOARD_SIZE, cells=nil)
-      @size = size
-      @cells = cellify(cells || Array.new(size*size) {nil})
+    def initialize(options)
+      options = defaults.merge!(options)
+      @size = options[:size]
+      @cells = cellify(options[:cells] || Array.new(size*size) {nil})
+    end
+
+    def defaults
+      {cells: []}
     end
 
     def get_cell(cell_number)
-      cells[cell_number-1].symbol
+      cells[cell_number].symbol
     end
 
     def set_cell(cell_number, player_mark)
-      cells[cell_number-1].symbol = player_mark
+      cells[cell_number].symbol = player_mark
     end
 
     def remove_mark(cell_number)
-      cells[cell_number-1].symbol = nil
+      cells[cell_number].symbol = nil
     end
 
     def empty_cell?(cell_number)
-      cells[cell_number-1].symbol == nil
+      cells[cell_number].symbol == nil
     end
 
     def empty_cells
@@ -59,11 +64,20 @@
       winner? || tie_game?
     end
 
-    Cell = Struct.new(:symbol)
+    def each_row
+      cells.each_slice(3) {|group| yield group}
+    end
+
+    Cell = Struct.new(:symbol, :index)
 
     def cellify(data)
-      data.map {|symbol| Cell.new(symbol)}
+      data.each_with_index.map {|symbol, index| Cell.new(symbol, index)}
     end
+
+    def to_array
+      cells.map(&:symbol)
+    end
+
 
     private
 

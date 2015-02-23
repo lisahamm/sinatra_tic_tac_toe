@@ -1,0 +1,10 @@
+div.board {
+  width: 400px;
+  margin: 0 auto;
+}
+
+form {
+  display: inline-block;
+  height: 30px;
+  width: 40px;
+}

@@ -1,20 +1,23 @@
-<table>
-  <% @board.each_row_with_index do |row, row_index| %>
-    <tr>
-      <% row.each_with_index do |cell, cell_index| %>
-        <td>
+<h1>Tic Tac Toe</h1>
+
+<h3><%= @player_mark %></h3>
+
+<div class="board">
+  <% @board.each_row do |row| %>
+    <div class="row">
+      <% row.each do |cell| %>
           <% if (cell.symbol == nil) %>
-            <form action="/new_game" method="POST">
-              <input type="hidden" name="move" value="<%= cell_index + (row_index*3) %>" />
-              <input type="submit" value="<%= '___' %>" />
+            <form action="/make_move" method="POST">
+              <input type="hidden" name="move" value="<%= cell.index %>" />
+              <input type="submit" value="___" />
             </form>
           <% else %>
-            <form action="/new_game" method="POST">
-              <input type="submit" value="<%= 'X' %>" readonly />
+            <form action="/make_move" method="POST">
+              <input type="submit" name="<%= cell.index %>" value=" <%= @player_mark %> " readonly />
             </form>
           <% end %>
-        </td>
+        </form>
       <% end %>
-    </tr>
+    </div>
   <% end %>
-</table>
+</div>
