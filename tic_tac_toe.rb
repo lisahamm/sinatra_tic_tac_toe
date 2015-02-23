@@ -14,8 +14,8 @@ end
 
 get '/game' do
   @player_mark = session[:mark]
-  @board = Board.new(cells: session[:moves])
-  session[:moves] = @board.symbols_to_array
+  @board = TicTacToe::Board.new(cells: session[:moves])
+  session[:moves] = @board.to_array
   erb :board
 end
 
@@ -23,8 +23,8 @@ post '/make_move' do
   p params
   p session[:moves]
   move = params[:move].to_i
-  board = Board.new(3, session[:moves])
+  board = TicTacToe::Board.new(cells: session[:moves])
   board.set_cell(move, session[:mark])
-  session[:moves] = board.symbols_to_array
+  session[:moves] = board.to_array
   redirect to('/game')
 end

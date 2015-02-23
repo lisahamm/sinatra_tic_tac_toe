@@ -4,7 +4,7 @@ module TicTacToe
   class Board
     attr_accessor :cells, :size
 
-    def initialize(options)
+    def initialize(options={})
       options = defaults.merge(options)
       @size = options[:size]
       @cells = cellify(options[:cells] || Array.new(size*size) {nil})
