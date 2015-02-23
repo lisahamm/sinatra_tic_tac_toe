@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/lisahamm/tic_tac_toe.git
+  revision: 4a93fa03833868fbe81f7344697bb14df22513b8
+  specs:
+    tic_tac_toe (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -29,3 +35,4 @@ PLATFORMS
 DEPENDENCIES
   rspec
   sinatra
+  tic_tac_toe!

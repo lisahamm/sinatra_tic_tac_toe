@@ -1,5 +1,5 @@
 require 'sinatra'
-require './lib/board.rb'
+require 'tic_tac_toe'
 enable :sessions
 
 get '/' do
