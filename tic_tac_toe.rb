@@ -25,7 +25,13 @@ post '/make_move' do
   board = TicTacToe::Board.new(cells: session[:moves])
   board.set_cell(move, session[:mark])
   session[:moves] = board.to_array
+  redirect to('/game_over') if board.winner? || board.tie_game?
   player_mark = session[:mark] == 'X' ? 'O' : 'X'
   session[:mark] = player_mark
   redirect to('/game')
+end
+
+get '/game_over' do
+  @board = TicTacToe::Board.new(cells: session[:moves])
+  erb :game_over
 end
