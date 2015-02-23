@@ -1,0 +1,10 @@
+<div class="text-container">
+  <p>Game over!</p>
+  <% if @board.tie_game? %>
+    <p>Result: tie game</p>
+  <% else %>
+    <p>Result: Player <%= @board.get_winning_mark %> wins</p>
+  <% end %>
+  <p>Thanks for playing!</p>
+  <a href="/">Play again</a>
+</div>
