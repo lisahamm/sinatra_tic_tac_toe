@@ -13,7 +13,7 @@
             </form>
           <% else %>
             <form action="/make_move" method="POST">
-              <input type="submit" name="<%= cell.index %>" value=" <%= @player_mark %> " readonly />
+              <input type="submit" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
             </form>
           <% end %>
         </form>
