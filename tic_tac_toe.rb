@@ -26,8 +26,14 @@ post '/make_move' do
   session[:moves] = board.to_array
   redirect to('/game_over') if board.winner? || board.tie_game?
   player_mark = session[:mark] == 'X' ? 'O' : 'X'
-  TicTacToe::ComputerPlayer.new(player_mark)
   session[:mark] = player_mark
+  if session[:opponent] == 'yes'
+    @computer_player = TicTacToe::ComputerPlayer.new(player_mark)
+    @computer_player.take_turn(board)
+    session[:moves] = board.to_array
+    player_mark = session[:mark] == 'X' ? 'O' : 'X'
+    session[:mark] = player_mark
+  end
   redirect to('/game')
 end
 
