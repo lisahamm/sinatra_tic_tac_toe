@@ -1,0 +1,29 @@
+<div>
+  <form id="setup-form" action="/setup" method="POST">
+
+    <div class="form-section">
+      Player 1, select your mark:
+      <input type="radio" name="player_mark" value="X" />X
+      <input type="radio" name="player_mark" value="O" />O
+    </div>
+
+    <% if params[:player_mark] == nil %>
+      <p>*Please select a mark in order to continue.</p>
+    <% end %>
+
+    <div class="form-section">
+      Would you like to play against the computer?:
+      <input type="radio" name="opponent" value="yes" />Yes
+      <input type="radio" name="opponent" value="no" />No
+    </div>
+
+    <% if params[:opponent] == nil %>
+      <p>*Please indicate if you would like to play against the computer in order to continue.</p>
+    <% end %>
+
+    <div class="form-section">
+      <input id="setup-submit" type ="submit" value="Submit" />
+    </div>
+  </form>
+</div>
+

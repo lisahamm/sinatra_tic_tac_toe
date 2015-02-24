@@ -10,9 +10,14 @@ class TicTacToeController < Sinatra::Base
   end
 
   post '/setup' do
+    redirect to('/invalid_setup') if params[:player_mark] == nil || params[:opponent] == nil
     session[:mark] = params[:player_mark]
     session[:opponent] = params[:opponent]
     redirect to('/game')
+  end
+
+  get '/invalid_setup' do
+    erb :index_with_validation_messages
   end
 
   get '/game' do

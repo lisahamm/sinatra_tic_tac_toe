@@ -41,6 +41,13 @@ input#setup-submit {
   width: 80px;
 }
 
+#setup-form p {
+  color: red;
+  font-size: 0.9em;
+  font-weight: 300;
+  margin: 5px;
+}
+
 input#cell-btn {
   border: 1px solid black;
   border-radius: 3px;
