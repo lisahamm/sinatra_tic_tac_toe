@@ -24,6 +24,10 @@ form {
   margin: 5px;
 }
 
+form div.form-section {
+  padding: 5px;
+}
+
 input#cell-btn {
   border: 1px solid black;
   border-radius: 3px;

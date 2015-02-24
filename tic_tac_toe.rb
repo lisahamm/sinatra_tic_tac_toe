@@ -7,8 +7,9 @@ get '/' do
   erb :index
 end
 
-post '/mark' do
+post '/setup' do
   session[:mark] = params[:player_mark]
+  session[:opponent] = params[:opponent]
   redirect to('/game')
 end
 
@@ -19,14 +20,13 @@ get '/game' do
 end
 
 post '/make_move' do
-  p params
-  p session[:moves]
   move = params[:move].to_i
   board = TicTacToe::Board.new(cells: session[:moves])
   board.set_cell(move, session[:mark])
   session[:moves] = board.to_array
   redirect to('/game_over') if board.winner? || board.tie_game?
   player_mark = session[:mark] == 'X' ? 'O' : 'X'
+  TicTacToe::ComputerPlayer.new(player_mark)
   session[:mark] = player_mark
   redirect to('/game')
 end
