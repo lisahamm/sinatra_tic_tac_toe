@@ -7,11 +7,19 @@
       <input type="radio" name="player_mark" value="O" />O
     </div>
 
+    <% if params[:player_mark] == nil %>
+      <p><%= @invalid_input_message %></p>
+    <% end %>
+
     <div class="form-section">
       Would you like to play against the computer?:
       <input type="radio" name="opponent" value="yes" />Yes
       <input type="radio" name="opponent" value="no" />No
     </div>
+
+    <% if params[:opponent] == nil %>
+      <p><%= @invalid_input_message %></p>
+    <% end %>
 
     <div class="form-section">
       <input id="setup-submit" type ="submit" value="Submit" />
