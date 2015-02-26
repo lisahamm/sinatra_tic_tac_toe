@@ -35,5 +35,16 @@ describe 'GameSetup' do
       invalid_game_setup.valid?
       expect(invalid_game_setup.errors.empty?).to eq false
     end
+
+    it 'stores missing parameter symbol in the errors hash' do
+      invalid_game_setup.valid?
+      expect(invalid_game_setup.errors.has_key?(:player_mark)).to eq true
+    end
+
+    it 'stores error messages in error hash for missing parameter' do
+      invalid_game_setup.valid?
+      expect(invalid_game_setup.errors[:player_mark].respond_to?(:to_s)).to eq true
+    end
+
   end
 end
