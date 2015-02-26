@@ -1,7 +1,9 @@
 require 'sinatra/base'
 require 'tic_tac_toe'
+require './lib/game_setup'
 
 class TicTacToeController < Sinatra::Base
+  include Validation
   enable :sessions
 
   get '/' do
@@ -10,19 +12,16 @@ class TicTacToeController < Sinatra::Base
   end
 
   post '/setup' do
-    if params[:player_mark] || params[:opponent] == nil
-      session[:invalid_input_message] = "Please select an option to continue"
-      redirect to('/invalid_setup')
-    else
-      session[:mark] = params[:player_mark]
-      session[:opponent] = params[:opponent]
-      redirect to('/game')
-    end
-  end
 
-  get '/invalid_setup' do
-    @invalid_input_message = session[:invalid_input_message]
-    erb :index
+    if !setup_valid?(params)
+      @invalid_input_messages = error_messages
+      erb :index
+    end
+
+    session[:mark] = params[:player_mark]
+    session[:opponent] = params[:opponent]
+    session[:player_order] = params[:player_order]
+    redirect to('/game')
   end
 
   get '/game' do

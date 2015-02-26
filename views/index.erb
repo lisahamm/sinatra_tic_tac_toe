@@ -2,13 +2,13 @@
   <form id="setup-form" action="/setup" method="POST">
 
     <div class="form-section">
-      Player 1, select your mark:
+      Select your mark:
       <input type="radio" name="player_mark" value="X" />X
       <input type="radio" name="player_mark" value="O" />O
     </div>
 
-    <% if params[:player_mark] == nil %>
-      <p><%= @invalid_input_message %></p>
+    <% if params[:player_mark] == {} %>
+      <p><%= @invalid_input_messages[:player_mark] %></p>
     <% end %>
 
     <div class="form-section">
@@ -18,7 +18,17 @@
     </div>
 
     <% if params[:opponent] == nil %>
-      <p><%= @invalid_input_message %></p>
+      <p><%= @invalid_input_messages[:opponent] %></p>
+    <% end %>
+
+    <div class="form-section">
+      Would you like to go first or second?:
+      <input type="radio" name="player_order" value="first" />First
+      <input type="radio" name="player_order" value="second" />Second
+    </div>
+
+    <% if params[:player_order] == nil %>
+      <p><%= @invalid_input_messages[:player_order] %></p>
     <% end %>
 
     <div class="form-section">
