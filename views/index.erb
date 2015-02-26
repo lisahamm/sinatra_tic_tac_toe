@@ -9,7 +9,7 @@
 
     <% if flash[:errors] %>
       <div class="error">
-        <p>*<%= flash[:errors].fetch(:player_mark) %></p>
+        <p><%= flash[:errors][:player_mark] %></p>
       </div>
     <% end %>
 
@@ -21,7 +21,7 @@
 
     <% if flash[:errors] %>
       <div class="error">
-        <p>*<%= flash[:errors].fetch(:opponent) %></p>
+        <p><%= flash[:errors][:opponent] %></p>
       </div>
     <% end %>
 
@@ -33,7 +33,7 @@
 
     <% if flash[:errors] %>
       <div class="error">
-        <p>*<%= flash[:errors].fetch(:player_order) %></p>
+        <p><%= flash[:errors][:player_order] %></p>
       </div>
     <% end %>
 

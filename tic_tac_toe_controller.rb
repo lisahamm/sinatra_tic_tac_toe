@@ -16,7 +16,6 @@ class TicTacToeController < Sinatra::Base
     @setup = GameSetup.new(params)
     if @setup.invalid?
       flash[:errors] = @setup.errors
-      p flash[:errors]
       erb :index
     else
       session[:mark] = params[:player_mark]
