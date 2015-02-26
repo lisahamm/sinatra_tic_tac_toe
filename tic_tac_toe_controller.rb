@@ -3,7 +3,6 @@ require 'tic_tac_toe'
 require './lib/game_setup'
 
 class TicTacToeController < Sinatra::Base
-  include Validation
   enable :sessions
 
   get '/' do

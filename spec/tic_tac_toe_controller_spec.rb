@@ -1,7 +1,7 @@
 ENV['RACK_ENV'] = 'test'
 
 
-require 'tic_tac_toe_controller'
+require '../tic_tac_toe_controller'
 require 'rspec'
 require 'rack/test'
 

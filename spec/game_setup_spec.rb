@@ -13,6 +13,10 @@ describe 'GameSetup' do
       expect(valid_game_setup.valid?).to eq true
     end
 
+    it 'checks if game configurations are invalid' do
+      expect(valid_game_setup.invalid?).to eq false
+    end
+
     it 'does not produce error messages' do
       expect(valid_game_setup.errors.empty?).to eq true
     end
@@ -23,7 +27,12 @@ describe 'GameSetup' do
       expect(invalid_game_setup.valid?).to eq false
     end
 
-    it 'does not produce error messages' do
+    it 'checks if game configurations are invalid' do
+      expect(invalid_game_setup.invalid?).to eq true
+    end
+
+    it 'retrieves and stores the appropriate error messages for invalid params' do
+      invalid_game_setup.valid?
       expect(invalid_game_setup.errors.empty?).to eq false
     end
   end

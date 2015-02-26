@@ -18,20 +18,8 @@ class GameSetup
   private
 
   def run_validations
-    validate_player
-    validate_opponent
-    validate_player_order
-  end
-
-  def validate_player_mark
     validate(:player_mark)
-  end
-
-  def validate_opponent
     validate(:opponent)
-  end
-
-  def validate_player_order
     validate(:player_order)
   end
 
