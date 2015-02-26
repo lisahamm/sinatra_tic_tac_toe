@@ -11,16 +11,15 @@ class TicTacToeController < Sinatra::Base
   end
 
   post '/setup' do
-
-    if !setup_valid?(params)
-      @invalid_input_messages = error_messages
+    @setup = GameSetup.new(params)
+    if @setup.invalid?
       erb :index
+    else
+      session[:mark] = params[:player_mark]
+      session[:opponent] = params[:opponent]
+      session[:player_order] = params[:player_order]
+      redirect to('/game')
     end
-
-    session[:mark] = params[:player_mark]
-    session[:opponent] = params[:opponent]
-    session[:player_order] = params[:player_order]
-    redirect to('/game')
   end
 
   get '/game' do
