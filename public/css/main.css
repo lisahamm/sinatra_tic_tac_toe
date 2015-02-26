@@ -41,9 +41,9 @@ input#setup-submit {
   width: 80px;
 }
 
-#setup-form p {
+#setup-form div.error {
   color: red;
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-weight: 300;
   margin: 5px;
 }

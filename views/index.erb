@@ -7,8 +7,10 @@
       <input type="radio" name="player_mark" value="O" />O
     </div>
 
-    <% if params[:player_mark] == {} %>
-      <p><%= @invalid_input_messages[:player_mark] %></p>
+    <% if flash[:errors] %>
+      <div class="error">
+        <p>*<%= flash[:errors].fetch(:player_mark) %></p>
+      </div>
     <% end %>
 
     <div class="form-section">
@@ -17,8 +19,10 @@
       <input type="radio" name="opponent" value="no" />No
     </div>
 
-    <% if params[:opponent] == nil %>
-      <p><%= @invalid_input_messages[:opponent] %></p>
+    <% if flash[:errors] %>
+      <div class="error">
+        <p>*<%= flash[:errors].fetch(:opponent) %></p>
+      </div>
     <% end %>
 
     <div class="form-section">
@@ -27,8 +31,10 @@
       <input type="radio" name="player_order" value="second" />Second
     </div>
 
-    <% if params[:player_order] == nil %>
-      <p><%= @invalid_input_messages[:player_order] %></p>
+    <% if flash[:errors] %>
+      <div class="error">
+        <p>*<%= flash[:errors].fetch(:player_order) %></p>
+      </div>
     <% end %>
 
     <div class="form-section">
