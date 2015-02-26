@@ -1,9 +1,11 @@
 require 'sinatra/base'
+require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/game_setup'
 
 class TicTacToeController < Sinatra::Base
   enable :sessions
+  use Rack::Flash
 
   get '/' do
     session.clear
@@ -13,6 +15,7 @@ class TicTacToeController < Sinatra::Base
   post '/setup' do
     @setup = GameSetup.new(params)
     if @setup.invalid?
+      @
       erb :index
     else
       session[:mark] = params[:player_mark]
