@@ -15,13 +15,13 @@
 
     <div class="form-section">
       Would you like to play against the computer?:
-      <input type="radio" name="opponent" value="yes" />Yes
-      <input type="radio" name="opponent" value="no" />No
+      <input type="radio" name="computer_opponent" value="yes" />Yes
+      <input type="radio" name="computer_opponent" value="no" />No
     </div>
 
     <% if flash[:errors] %>
       <div class="error">
-        <p><%= flash[:errors][:opponent] %></p>
+        <p><%= flash[:errors][:computer_opponent] %></p>
       </div>
     <% end %>
 

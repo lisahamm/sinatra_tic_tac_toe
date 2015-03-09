@@ -2,8 +2,8 @@ require 'spec_helper'
 require 'game_setup'
 
 describe 'GameSetup' do
-  valid_params = {player_mark: 'X', opponent: 'yes', player_order: 'first'}
-  invalid_params = {opponent: 'yes', player_order: 'third'}
+  valid_params = {player_mark: 'X', computer_opponent: 'yes', player_order: 'first'}
+  invalid_params = {computer_opponent: 'yes', player_order: 'third'}
 
   let(:valid_game_setup) {GameSetup.new(valid_params)}
   let(:invalid_game_setup) {GameSetup.new(invalid_params)}

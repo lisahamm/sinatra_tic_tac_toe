@@ -19,7 +19,7 @@ class GameSetup
 
   def run_validations
     validate(:player_mark)
-    validate(:opponent)
+    validate(:computer_opponent)
     validate(:player_order)
   end
 
@@ -35,7 +35,7 @@ class GameSetup
   def valid_options
     {
       player_mark: ["X", "O"],
-      opponent: ["yes", "no"],
+      computer_opponent: ["yes", "no"],
       player_order: ["first", "second"]
     }
   end
@@ -43,7 +43,7 @@ class GameSetup
   def message_options
     {
       player_mark: "Please select a mark to continue",
-      opponent: "Please indicate if you would like to play against the computer",
+      computer_opponent: "Please indicate if you would like to play against the computer",
       player_order: "Please select if you would like to go first or second"
     }
   end

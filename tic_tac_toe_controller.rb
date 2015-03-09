@@ -2,10 +2,13 @@ require 'sinatra/base'
 require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/game_setup'
+require './lib/game_helpers'
+
 
 class TicTacToeController < Sinatra::Base
   enable :sessions
   use Rack::Flash
+  include GameHelpers
 
   get '/' do
     session.clear
@@ -18,9 +21,8 @@ class TicTacToeController < Sinatra::Base
       flash[:errors] = @setup.errors
       erb :index
     else
-      session[:mark] = params[:player_mark]
-      session[:opponent] = params[:opponent]
-      session[:player_order] = params[:player_order]
+      session[:game] = create_game(params)
+      session[:computer_opponent] = params[:computer_opponent]
       redirect to('/game')
     end
   end
@@ -33,19 +35,19 @@ class TicTacToeController < Sinatra::Base
 
   post '/make_move' do
     move = params[:move].to_i
-    board = TicTacToe::Board.new(cells: session[:moves])
-    board.set_cell(move, session[:mark])
-    session[:moves] = board.to_array
-    redirect to('/game_over') if board.winner? || board.tie_game?
-    player_mark = session[:mark] == 'X' ? 'O' : 'X'
-    session[:mark] = player_mark
-    if session[:opponent] == 'yes'
-      @computer_player = TicTacToe::ComputerPlayer.new(player_mark)
-      @computer_player.take_turn(board)
-      session[:moves] = board.to_array
-      player_mark = session[:mark] == 'X' ? 'O' : 'X'
-      session[:mark] = player_mark
-    end
+    game = session[:game]
+    game.take_turn(move)
+    game.switch_turn
+    session[:game] = game
+    session[:moves] = game.board.to_array
+    redirect to('/game_over') if !game.in_progress?
+    # if session[:computer_opponent] == 'yes'
+    #   @computer_player = TicTacToe::AI.new(player_mark)
+    #   @computer_player.take_turn(board)
+    #   session[:moves] = board.to_array
+    #   player_mark = session[:mark] == 'X' ? 'O' : 'X'
+    #   session[:mark] = player_mark
+    # end
     redirect to('/game')
   end
 
