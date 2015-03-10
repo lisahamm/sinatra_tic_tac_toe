@@ -12,11 +12,11 @@ describe 'GameHelpers' do
     end
   end
 
-  describe '#configure_players' do
-    it "sets marks for the first and second player" do
-      player_marks = configure_players(params)
-      expect(player_marks[:player1]).to eq "X"
-      expect(player_marks[:player2]).to eq "O"
+  describe '#player_settings' do
+    it "creates settings for the first and second player" do
+      player_settings = player_settings(params)
+      expect(player_settings[0].fetch(:mark)).to eq "X"
+      expect(player_settings[1].fetch(:mark)).to eq "O"
     end
   end
 

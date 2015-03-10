@@ -1,19 +1,19 @@
 module GameHelpers
   def create_game(params)
-    player_marks = configure_players(params)
-    TicTacToe::Game.new(TicTacToe::Board.new, player_marks[:player1], player_marks[:player2])
+    TicTacToe::Game.new(player_settings(params))
   end
 
-  def configure_players(params)
-    player_marks = {}
+  def player_settings(params)
+    player_settings = []
+    ai = computer_opponent(params) != nil
     if params[:player_order] = 'first'
-      player_marks[:player1] = params[:player_mark]
-      player_marks[:player2] = opponent_mark(player_marks[:player1])
+      player_settings[0] = {mark: params[:player_mark], ai: false}
+      player_settings[1] = {mark: opponent_mark(params[:player_mark]), ai: ai}
     else
-      player_marks[:player2] = params[:player_mark]
-      player_marks[:player1] = opponent_mark(player_marks[:player2])
+      player_settings[0] = {mark: opponent_mark(params[:player_mark]), ai: ai}
+      player_settings[1] = {mark: params[:player_mark], ai: false}
     end
-    player_marks
+    player_settings
   end
 
   def opponent_mark(mark)
@@ -25,6 +25,4 @@ module GameHelpers
       params[:player_order] == 'first' ? 'player2' : 'player1'
     end
   end
-
-
 end
