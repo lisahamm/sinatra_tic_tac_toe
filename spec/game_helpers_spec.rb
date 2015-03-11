@@ -5,10 +5,10 @@ describe 'GameHelpers' do
   include GameHelpers
   let(:params) {{player_mark: "X", computer_opponent: "no", player_order: "first"}}
 
-  describe '#create_game' do
+  xdescribe '#create_game' do
     it "configures the game based on the params" do
       game = create_game(params)
-      expect(game.player1.mark).to eq 'X'
+      expect(game.player1.mark).to eq "X"
     end
   end
 
@@ -22,7 +22,7 @@ describe 'GameHelpers' do
 
   describe '#opponent_mark' do
     it "returns the opponent's mark" do
-      expect(opponent_mark('X')).to eq 'O'
+      expect(opponent_mark("X")).to eq "O"
     end
   end
 

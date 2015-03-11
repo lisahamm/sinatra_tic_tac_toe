@@ -1,6 +1,7 @@
 module GameHelpers
   def create_game(params)
-    TicTacToe::Game.new(player_settings(params))
+    player_settings = player_settings(params)
+    TicTacToe::Game.new(player_settings, player_settings[0][:mark])
   end
 
   def player_settings(params)
@@ -17,7 +18,7 @@ module GameHelpers
   end
 
   def opponent_mark(mark)
-    mark == 'X' ? 'O' : 'X'
+    mark == "X" ? "O" : "X"
   end
 
   def computer_opponent(params)
