@@ -25,11 +25,11 @@ class TicTacToeController < Sinatra::Base
 
       if computer_opponent(params) == "player1"
         game.take_turn(game.generate_ai_move)
-        game.switch_turn
       end
 
       session[:computer_opponent] = computer_opponent(params)
-      session[:player_settings] = player_settings(params)
+      session[:player1_mark] = player_marks(params)[0]
+      session[:player2_mark] = player_marks(params)[1]
       session[:current_player_mark] = game.current_player_mark
       session[:moves] = game.board_to_array
       redirect to('/game')
@@ -43,11 +43,10 @@ class TicTacToeController < Sinatra::Base
 
   post '/make_move' do
     board = array_to_board(session[:moves])
-    game = TicTacToe::Game.new(board, session[:player_settings], session[:current_player_mark])
+    game = TicTacToe::Game.new(session[:player1_mark], session[:player2_mark], session[:current_player_mark], board)
 
     move = params[:move].to_i
     game.take_turn(move)
-    game.switch_turn
 
     if !game.in_progress?
       session[:moves] = game.board_to_array
@@ -56,7 +55,6 @@ class TicTacToeController < Sinatra::Base
 
     if session[:computer_opponent] != nil
       game.take_turn(game.generate_ai_move)
-      game.switch_turn
     end
 
     session[:moves] = game.board_to_array
