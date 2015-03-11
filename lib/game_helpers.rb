@@ -1,20 +1,15 @@
 module GameHelpers
   def create_game(params)
-    player_settings = player_settings(params)
-    TicTacToe::Game.new(player_settings, player_settings[0][:mark])
+    player_marks = player_marks(params)
+    TicTacToe::Game.new(player_marks[0], player_marks[1], player_marks[0])
   end
 
-  def player_settings(params)
-    player_settings = []
-    ai = computer_opponent(params) != nil
+  def player_marks(params)
     if params[:player_order] == 'first'
-      player_settings[0] = {mark: params[:player_mark], ai: false}
-      player_settings[1] = {mark: opponent_mark(params[:player_mark]), ai: ai}
+      [params[:player_mark], opponent_mark(params[:player_mark])]
     else
-      player_settings[0] = {mark: opponent_mark(params[:player_mark]), ai: ai}
-      player_settings[1] = {mark: params[:player_mark], ai: false}
+      [opponent_mark(params[:player_mark]), params[:player_mark]]
     end
-    player_settings
   end
 
   def opponent_mark(mark)
@@ -24,11 +19,7 @@ module GameHelpers
   def computer_opponent(params)
     player_order = params[:player_order]
     if params[:computer_opponent] == "yes"
-      if player_order == "first"
-        return "player2"
-      else
-        return "player1"
-      end
+      return player_order == "first" ? "player2" : "player1"
     end
     nil
   end
@@ -36,4 +27,5 @@ module GameHelpers
   def array_to_board(array)
     TicTacToe::Board.new(cells: array)
   end
+
 end
