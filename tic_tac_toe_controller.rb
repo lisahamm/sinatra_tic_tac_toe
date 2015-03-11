@@ -31,15 +31,13 @@ class TicTacToeController < Sinatra::Base
       session[:computer_opponent] = computer_opponent(params)
       session[:player_settings] = player_settings(params)
       session[:current_player_mark] = game.current_player_mark
-      session[:player1] = game.player1
-      session[:player2] = game.player2
       session[:moves] = game.board_to_array
       redirect to('/game')
     end
   end
 
   get '/game' do
-    @board = TicTacToe::Board.new(cells: session[:moves])
+    @board = array_to_board(session[:moves])
     erb :board
   end
 
@@ -68,7 +66,7 @@ class TicTacToeController < Sinatra::Base
   end
 
   get '/game_over' do
-    @board = TicTacToe::Board.new(cells: session[:moves])
+    @board = array_to_board(session[:moves])
     erb :game_over
   end
 
