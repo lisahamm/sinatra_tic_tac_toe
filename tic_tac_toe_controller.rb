@@ -21,7 +21,12 @@ class TicTacToeController < Sinatra::Base
       flash[:errors] = @setup.errors
       erb :index
     else
-      session[:game] = create_game(params)
+      game = create_game(params)
+      if computer_opponent(params) == 'player1'
+        game.take_turn(generate_ai_move)
+        switch_turn
+      end
+      session[:game] = game
       redirect to('/game')
     end
   end
@@ -37,9 +42,12 @@ class TicTacToeController < Sinatra::Base
     move = params[:move].to_i
     game.take_turn(move)
     game.switch_turn
+    redirect to('/game_over') if !game.in_progress?
+    game.take_turn(game.generate_ai_move)
+    game.switch_turn
+    redirect to('/game_over') if !game.in_progress?
     session[:game] = game
     session[:moves] = game.board.to_array
-    redirect to('/game_over') if !game.in_progress?
     redirect to('/game')
   end
 
