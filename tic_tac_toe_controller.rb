@@ -22,37 +22,42 @@ class TicTacToeController < Sinatra::Base
       erb :index
     else
       game = create_game(params)
-      if computer_opponent(params) == 'player1'
-        game.take_turn(generate_ai_move)
-        switch_turn
+      if computer_opponent(params) == "player1"
+        game.take_turn(game.generate_ai_move)
+        game.switch_turn
       end
-      session[:game] = game
+      session[:player_settings] = player_settings(params)
+      session[:current_player] = game.current_player
+      session[:player1] = game.player1
+      session[:player2] = game.player2
+      session[:moves] = game.board.to_array
       redirect to('/game')
     end
   end
 
   get '/game' do
-    game = session[:game]
-    @board = game.board
+    @board = TicTacToe::Board.new(cells: session[:moves])
     erb :board
   end
 
   post '/make_move' do
-    game = session[:game]
+    board = array_to_board(session[:moves])
+    game = TicTacToe::Game.new(board, session[:player_settings])
+    game.current_player = session[:current_player]
     move = params[:move].to_i
     game.take_turn(move)
     game.switch_turn
     redirect to('/game_over') if !game.in_progress?
     game.take_turn(game.generate_ai_move)
     game.switch_turn
-    redirect to('/game_over') if !game.in_progress?
-    session[:game] = game
     session[:moves] = game.board.to_array
+    session[:current_player] = game.current_player
+    redirect to('/game_over') if !game.in_progress?
     redirect to('/game')
   end
 
   get '/game_over' do
-    @board = session[:game].board
+    @board = TicTacToe::Board.new(cells: session[:moves])
     erb :game_over
   end
 

@@ -6,7 +6,7 @@ module GameHelpers
   def player_settings(params)
     player_settings = []
     ai = computer_opponent(params) != nil
-    if params[:player_order] = 'first'
+    if params[:player_order] == 'first'
       player_settings[0] = {mark: params[:player_mark], ai: false}
       player_settings[1] = {mark: opponent_mark(params[:player_mark]), ai: ai}
     else
@@ -21,8 +21,18 @@ module GameHelpers
   end
 
   def computer_opponent(params)
-    if params[:computer_opponent] == 'yes'
-      params[:player_order] == 'first' ? 'player2' : 'player1'
+    player_order = params[:player_order]
+    if params[:computer_opponent] == "yes"
+      if player_order == "first"
+        return "player2"
+      else
+        return "player1"
+      end
     end
+    nil
+  end
+
+  def array_to_board(array)
+    TicTacToe::Board.new(cells: array)
   end
 end
