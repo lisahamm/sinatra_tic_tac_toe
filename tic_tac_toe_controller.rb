@@ -23,11 +23,10 @@ class TicTacToeController < Sinatra::Base
     else
       game = create_game(params)
 
-      if computer_opponent(params) == "player1"
-        game.take_turn(game.generate_ai_move)
-      end
+      session[:computer_opponent] = computer_opponent(params, game)
 
-      session[:computer_opponent] = computer_opponent(params)
+      check_for_computer_turn(game)
+
       session[:player1_mark] = player_marks(params)[0]
       session[:player2_mark] = player_marks(params)[1]
       session[:current_player_mark] = game.current_player_mark
@@ -53,9 +52,7 @@ class TicTacToeController < Sinatra::Base
       redirect to('/game_over')
     end
 
-    if session[:computer_opponent] != nil
-      game.take_turn(game.generate_ai_move)
-    end
+    check_for_computer_turn(game)
 
     session[:moves] = game.board_to_array
     session[:current_player_mark] = game.current_player_mark

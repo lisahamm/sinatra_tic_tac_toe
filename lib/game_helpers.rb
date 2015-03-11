@@ -16,12 +16,18 @@ module GameHelpers
     mark == "X" ? "O" : "X"
   end
 
-  def computer_opponent(params)
+  def computer_opponent(params, game)
     player_order = params[:player_order]
     if params[:computer_opponent] == "yes"
-      return player_order == "first" ? "player2" : "player1"
+      return player_order == "first" ? game.player2 : game.player1
     end
     nil
+  end
+
+  def check_for_computer_turn(game)
+    if game.current_player_mark == session[:computer_opponent]
+      game.take_turn(game.generate_ai_move)
+    end
   end
 
   def array_to_board(array)
