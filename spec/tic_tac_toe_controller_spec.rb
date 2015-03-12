@@ -23,6 +23,6 @@ describe 'The HelloWorld App' do
   #   post "/setup", player_mark: "X", computer_opponent: "yes"
   #   expect(last_response).to be_redirect
 
-  #   #expect(session[:mark]).to eq "O"
+    #expect(session[:mark]).to eq "O"
   # end
 end

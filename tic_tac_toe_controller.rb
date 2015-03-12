@@ -22,11 +22,8 @@ class TicTacToeController < Sinatra::Base
       erb :index
     else
       game = create_game(params)
-
       session[:computer_opponent] = computer_opponent(params, game)
-
-      check_for_computer_turn(game)
-
+      check_for_computer_turn(game, session[:computer_opponent])
       session[:player1_mark] = player_marks(params)[0]
       session[:player2_mark] = player_marks(params)[1]
       session[:current_player_mark] = game.current_player_mark
@@ -52,7 +49,7 @@ class TicTacToeController < Sinatra::Base
       redirect to('/game_over')
     end
 
-    check_for_computer_turn(game)
+    check_for_computer_turn(game, session[:computer_opponent])
 
     session[:moves] = game.board_to_array
     session[:current_player_mark] = game.current_player_mark

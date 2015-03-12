@@ -24,8 +24,8 @@ module GameHelpers
     nil
   end
 
-  def check_for_computer_turn(game)
-    if game.current_player_mark == session[:computer_opponent]
+  def check_for_computer_turn(game, computer_opponent)
+    if game.current_player_mark == computer_opponent
       game.take_turn(game.generate_ai_move)
     end
   end
