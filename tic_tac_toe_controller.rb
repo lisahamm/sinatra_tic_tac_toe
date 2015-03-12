@@ -44,7 +44,7 @@ class TicTacToeController < Sinatra::Base
     move = params[:move].to_i
     game.take_turn(move)
 
-    if !game.in_progress?
+    if game.over?
       session[:moves] = game.board_to_array
       redirect to('/game_over')
     end
@@ -53,7 +53,7 @@ class TicTacToeController < Sinatra::Base
 
     session[:moves] = game.board_to_array
     session[:current_player_mark] = game.current_player_mark
-    redirect to('/game_over') if !game.in_progress?
+    redirect to('/game_over') if game.over?
     redirect to('/game')
   end
 
