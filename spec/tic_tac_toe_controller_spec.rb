@@ -48,12 +48,46 @@ describe 'The TicTacToe App' do
                                        "current_player_mark" => "X",
                                        "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
+      expect(last_response.status).to eq 200
     end
   end
-  # it "starts the game" do
-  #   post "/setup", player_mark: "X", computer_opponent: "yes"
-  #   expect(last_response).to be_redirect
 
-    #expect(session[:mark]).to eq "O"
-  # end
+  describe "POST /make_move" do
+    before :each do
+      post '/make_move', {:move => '0'}, {'rack.session' => {
+                                     "computer_opponent" => nil,
+                                     "player1_mark" => "X",
+                                     "player2_mark" => "O",
+                                     "current_player_mark" => "X",
+                                     "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
+
+    end
+
+    it "adds the player's mark to the board" do
+      rack_mock_session.cookie_jar[:moves] == ["X", nil, nil, nil, nil, nil, nil, nil, nil]
+    end
+
+    it "redirects to /game" do
+      expect(last_response.redirect?).to eq true
+      follow_redirect!
+      expect(last_request.path).to eq '/game'
+    end
+  end
+
+  describe "GET /game_over" do
+    before :each do
+      get '/game_over', {}, {'rack.session' => {
+                                     "computer_opponent" => nil,
+                                     "player1_mark" => "X",
+                                     "player2_mark" => "O",
+                                     "current_player_mark" => "X",
+                                     "moves" => ["X", "X", "X", "O", "O", nil, nil, nil, nil]}}
+    end
+
+    it "loads the game over message" do
+      expect(last_response).to be_ok
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to include "Result: Player X wins"
+    end
+  end
 end
