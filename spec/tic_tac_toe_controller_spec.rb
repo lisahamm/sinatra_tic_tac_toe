@@ -49,11 +49,11 @@ describe 'The TicTacToe App' do
 
   describe "GET /game" do
     it "loads a game without any moves" do
-      get '/game', {}, {'rack.session' => {"computer_opponent" => "O",
-                                       "player1_mark" => "X",
-                                       "player2_mark" => "O",
-                                       "current_player_mark" => "X",
-                                       "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
+      get '/game', {}, {'rack.session' => {:computer_opponent => "O",
+                                       :player1_mark => "X",
+                                       :player2_mark => "O",
+                                       :current_player_mark => "X",
+                                       :moves => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
       expect(last_response.body).to include '<form action="/make_move" method="POST">'
@@ -61,11 +61,11 @@ describe 'The TicTacToe App' do
 
 
     it "loads the game with a move" do
-      get '/game', {}, {'rack.session' => {"computer_opponent" => "O",
-                                       "player1_mark" => "X",
-                                       "player2_mark" => "O",
-                                       "current_player_mark" => "X",
-                                       "moves" => ["X", nil, nil, nil, nil, nil, nil, nil, nil]}}
+      get '/game', {}, {'rack.session' => {:computer_opponent => "O",
+                                       :player1_mark => "X",
+                                       :player2_mark => "O",
+                                       :current_player_mark => "X",
+                                       :moves => ["X", nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
       expect(last_response.body).to include 'name="0" value=" X " readonly'
@@ -75,7 +75,7 @@ describe 'The TicTacToe App' do
 
   describe "POST /make_move" do
 
-    it "adds a human player's mark and a computer player's mark to the board" do
+    it "adds a human player's mark to the board" do
       @mock_game = instance_double("TicTacToe::Game", :board_to_array => [])
 
       expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
@@ -84,11 +84,11 @@ describe 'The TicTacToe App' do
       expect(@mock_game).to receive(:current_player_mark).and_return("X", "O")
 
       post '/make_move', {:move => '0'}, {'rack.session' => {
-                                     "computer_opponent" => nil,
-                                     "player1_mark" => "X",
-                                     "player2_mark" => "O",
-                                     "current_player_mark" => "X",
-                                     "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
+                                     :computer_opponent => nil,
+                                     :player1_mark => "X",
+                                     :player2_mark => "O",
+                                     :current_player_mark => "X",
+                                     :moves => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response.redirect?).to eq true
       expect(last_response.headers["Location"]).to eq ("http://example.org/game")
     end
@@ -108,11 +108,11 @@ describe 'The TicTacToe App' do
   describe "GET /game_over" do
     before :each do
       get '/game_over', {}, {'rack.session' => {
-                                     "computer_opponent" => nil,
-                                     "player1_mark" => "X",
-                                     "player2_mark" => "O",
-                                     "current_player_mark" => "X",
-                                     "moves" => ["X", "X", "X", "O", "O", nil, nil, nil, nil]}}
+                                     :computer_opponent => nil,
+                                     :player1_mark => "X",
+                                     :player2_mark => "O",
+                                     :current_player_mark => "X",
+                                     :moves => ["X", "X", "X", "O", "O", nil, nil, nil, nil]}}
     end
 
     it "loads the game over message" do
