@@ -1,5 +1,6 @@
-PATH
-  remote: /Users/lisahamm/Desktop/Projects/apprenticeship/tic_tac_toe/ruby_ttt
+GIT
+  remote: git://github.com/lisahamm/ruby_ttt.git
+  revision: d7fa7e304e6ac8f566e7815b0869d8337f2aa3da
   specs:
     tic_tac_toe (0.0.1)
 
