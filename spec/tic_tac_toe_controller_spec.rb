@@ -41,7 +41,7 @@ describe 'The TicTacToe App' do
   end
 
   describe "GET /game" do
-    it "loads the game" do
+    it "loads a game without any moves" do
       get '/game', {}, {'rack.session' => {"computer_opponent" => "O",
                                        "player1_mark" => "X",
                                        "player2_mark" => "O",
@@ -49,28 +49,52 @@ describe 'The TicTacToe App' do
                                        "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
+      expect(last_response.body).to include('<form action="/make_move" method="POST">')
+    end
+
+
+    it "loads the game with a move" do
+      get '/game', {}, {'rack.session' => {"computer_opponent" => "O",
+                                       "player1_mark" => "X",
+                                       "player2_mark" => "O",
+                                       "current_player_mark" => "X",
+                                       "moves" => ["X", nil, nil, nil, nil, nil, nil, nil, nil]}}
+      expect(last_response).to be_ok
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to include('name="0" value=" X " readonly')
     end
   end
 
+
   describe "POST /make_move" do
-    before :each do
+
+    it "adds a human player's mark and a computer player's mark to the board" do
+      @mock_game = instance_double("TicTacToe::Game", :board_to_array => [])
+
+      expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
+      expect(@mock_game).to receive(:take_turn).with(0)
+      expect(@mock_game).to receive(:over?).and_return(false, false)
+      expect(@mock_game).to receive(:current_player_mark).and_return("X", "O")
+
       post '/make_move', {:move => '0'}, {'rack.session' => {
                                      "computer_opponent" => nil,
                                      "player1_mark" => "X",
                                      "player2_mark" => "O",
                                      "current_player_mark" => "X",
                                      "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
-
-    end
-
-    it "adds the player's mark to the board" do
-      rack_mock_session.cookie_jar[:moves] == ["X", nil, nil, nil, nil, nil, nil, nil, nil]
-    end
-
-    it "redirects to /game" do
       expect(last_response.redirect?).to eq true
-      follow_redirect!
-      expect(last_request.path).to eq '/game'
+      expect(last_response.headers["Location"]).to eq ("http://example.org/game")
+    end
+
+    it "completes a game" do
+      @mock_game = instance_double("TicTacToe::Game", :board_to_array => [])
+      expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
+      expect(@mock_game).to receive(:take_turn).with(0)
+      expect(@mock_game).to receive(:over?).and_return true
+
+      post '/make_move', {:move => '0'}
+      expect(last_response.redirect?).to eq true
+      expect(last_response.headers["Location"]).to eq ("http://example.org/game_over")
     end
   end
 
