@@ -16,11 +16,18 @@ describe 'The TicTacToe App' do
     TicTacToeController
   end
 
-  it "gets the setup page" do
-    get '/'
-    expect(last_response).to be_ok
-    expect(last_response.status).to eq 200
-    expect(last_response.body).to include "Select your mark"
+  describe "GET '/'" do
+    it "loads the setup page with game setup options" do
+      get '/'
+      expect(last_response).to be_ok
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to include "Select your mark"
+    end
+
+    it "clears the session" do
+      get '/', {}, {'rack.session' => {:computer_opponent => "O"}}
+      expect(rack_mock_session.cookie_jar[:computer_opponent]).to be_nil
+    end
   end
 
   describe "POST '/setup'" do
@@ -49,7 +56,7 @@ describe 'The TicTacToe App' do
                                        "moves" => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
-      expect(last_response.body).to include('<form action="/make_move" method="POST">')
+      expect(last_response.body).to include '<form action="/make_move" method="POST">'
     end
 
 
@@ -61,7 +68,7 @@ describe 'The TicTacToe App' do
                                        "moves" => ["X", nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
-      expect(last_response.body).to include('name="0" value=" X " readonly')
+      expect(last_response.body).to include 'name="0" value=" X " readonly'
     end
   end
 
