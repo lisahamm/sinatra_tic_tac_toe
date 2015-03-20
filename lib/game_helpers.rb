@@ -1,7 +1,7 @@
 module GameHelpers
   def create_game(params)
     player_marks = player_marks(params)
-    TicTacToe::Game.new(player_marks[0], player_marks[1], player_marks[0])
+    TicTacToe::Game.new(*player_marks, player_marks.first)
   end
 
   def player_marks(params)
