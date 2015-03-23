@@ -1,6 +1,6 @@
 # TicTacToe
 
-Sinatra Tic Tac Toe game built around a Ruby Tic Tac Toe gem. View online at: https://lisa-tictactoe.herokuapp.com/.
+Sinatra Tic Tac Toe game built around a Ruby Tic Tac Toe gem. View online [here](https://lisa-tictactoe.herokuapp.com/).
 
 ## Installation
 
