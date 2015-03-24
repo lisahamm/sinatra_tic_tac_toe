@@ -6,7 +6,11 @@ require './lib/game_helpers'
 
 
 class TicTacToeController < Sinatra::Base
-  enable :sessions
+  configure do
+    enable :sessions
+    set :session_secret, ENV['SESSION_SECRET'] || 'session secret'
+  end
+
   use Rack::Flash
   include GameHelpers
 
