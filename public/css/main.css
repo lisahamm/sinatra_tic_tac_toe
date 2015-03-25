@@ -55,3 +55,30 @@ input#cell-btn {
   width: 50px;
   font-size: 1.5em;
 }
+
+div#game-history {
+  margin: 0px auto;
+  padding: 10px 5px;
+}
+
+#game-history h3 {
+  margin: 10px;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+table {
+  margin: 10px auto;
+  border: 1px solid black;
+}
+
+th, tr, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+td {
+  font-weight: 300;
+  font-size: 1em;
+}
