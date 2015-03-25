@@ -33,5 +33,4 @@ module GameHelpers
   def array_to_board(array)
     TicTacToe::Board.new(cells: array)
   end
-
 end

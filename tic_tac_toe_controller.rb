@@ -3,6 +3,7 @@ require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/game_setup'
 require './lib/game_helpers'
+require './lib/database_helpers'
 require 'sequel'
 
 class TicTacToeController < Sinatra::Base
@@ -64,26 +65,20 @@ class TicTacToeController < Sinatra::Base
 
   get '/game_over' do
 
-    DB = Sequel.connect('postgres://localhost/tictactoe')
-    moves = session[:moves].map do |move|
-              if move == nil
-                "nil"
-              else
-                move
-              end
-            end
+    DB = connect_to_database('postgres://localhost/tictactoe')
+    @games = all_games_in_database(DB)
+    args = {:player1_mark => session[:player1_mark],
+            :player2_mark => session[:player2_mark],
+            :computer_player_mark => session[:computer_opponent],
+            :moves => moves_to_string(session[:moves])}
 
-    moves_string = ""
-    moves.each {|move| moves_string << move + " "}
-    moves_string = moves_string.strip
+    save_game(@games, args)
 
-    games = DB[:games]
-    games.insert(:player1_mark => session[:player1_mark],
-                 :player2_mark => session[:player2_mark],
-                 :computer_player_mark => session[:computer_opponent],
-                 :moves => moves_string)
-    games.each do |row|
-      row[:id] row[:player1_mark] + row[:player2_mark] + row[:computer_player_mark] + row[:moves]
+    @games.each do |row|
+      p row[:player1_mark]
+      p row[:player2_mark]
+      p row[:computer_player_mark]
+      p row[:moves]
     end
 
     @board = array_to_board(session[:moves])
