@@ -8,6 +8,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.2.5)
+    pg (0.18.1)
     rack (1.6.0)
     rack-flash3 (1.0.5)
       rack
@@ -39,6 +40,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  pg
   rack-flash3
   rack-test
   rspec
