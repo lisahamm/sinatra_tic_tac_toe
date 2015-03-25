@@ -120,5 +120,9 @@ describe 'The TicTacToe App' do
       expect(last_response.status).to eq 200
       expect(last_response.body).to include "Result: Player X wins"
     end
+
+    it "displays all completed games" do
+      expect(last_response.body).to include "ID:"
+    end
   end
 end
