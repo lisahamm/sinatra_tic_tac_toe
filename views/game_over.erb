@@ -19,6 +19,7 @@
           <th>Player 1</th>
           <th>Player 2</th>
           <th>Moves</th>
+          <th>Timestamp</th>
         </tr>
         <% @games.each do |row| %>
           <tr>
@@ -26,6 +27,7 @@
             <td><%= row[:player1_mark] %> </td>
             <td><%= row[:player2_mark] %> </td>
             <td><%= row[:moves] %></td>
+            <td><%= row[:time] %></td>
           </tr>
         <% end %>
       </tbody>

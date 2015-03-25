@@ -14,7 +14,8 @@ module DatabaseHelpers
     games.insert(:player1_mark => args[:player1_mark],
                  :player2_mark => args[:player2_mark],
                  :computer_player_mark => args[:computer_player_mark],
-                 :moves => args[:moves])
+                 :moves => args[:moves],
+                 :time => Time.now)
   end
 
   def moves_to_string(moves_array)
