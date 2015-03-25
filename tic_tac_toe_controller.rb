@@ -3,7 +3,7 @@ require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/game_setup'
 require './lib/game_helpers'
-
+require 'sequel'
 
 class TicTacToeController < Sinatra::Base
   configure do
@@ -13,6 +13,7 @@ class TicTacToeController < Sinatra::Base
 
   use Rack::Flash
   include GameHelpers
+  include DatabaseHelpers
 
   get '/' do
     session.clear
@@ -62,6 +63,29 @@ class TicTacToeController < Sinatra::Base
   end
 
   get '/game_over' do
+
+    DB = Sequel.connect('postgres://localhost/tictactoe')
+    moves = session[:moves].map do |move|
+              if move == nil
+                "nil"
+              else
+                move
+              end
+            end
+
+    moves_string = ""
+    moves.each {|move| moves_string << move + " "}
+    moves_string = moves_string.strip
+
+    games = DB[:games]
+    games.insert(:player1_mark => session[:player1_mark],
+                 :player2_mark => session[:player2_mark],
+                 :computer_player_mark => session[:computer_opponent],
+                 :moves => moves_string)
+    games.each do |row|
+      row[:id] row[:player1_mark] + row[:player2_mark] + row[:computer_player_mark] + row[:moves]
+    end
+
     @board = array_to_board(session[:moves])
     erb :game_over
   end
