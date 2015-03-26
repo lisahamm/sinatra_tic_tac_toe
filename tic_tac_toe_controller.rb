@@ -50,6 +50,9 @@ class TicTacToeController < Sinatra::Base
     move = params[:move].to_i
     game.take_turn(move)
 
+    p params[:move]
+    p game.board_to_array
+
     if game.over?
       session[:moves] = game.board_to_array
       redirect to('/game_over')
@@ -73,13 +76,6 @@ class TicTacToeController < Sinatra::Base
             :moves => moves_to_string(session[:moves])}
 
     save_game(@games, args)
-
-    @games.each do |row|
-      p row[:player1_mark]
-      p row[:player2_mark]
-      p row[:computer_player_mark]
-      p row[:moves]
-    end
 
     @board = array_to_board(session[:moves])
     erb :game_over
