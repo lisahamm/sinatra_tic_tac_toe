@@ -45,13 +45,12 @@ class TicTacToeController < Sinatra::Base
 
   post '/make_move' do
     board = array_to_board(session[:moves])
-    game = TicTacToe::Game.new(session[:player1_mark], session[:player2_mark], session[:current_player_mark], board)
-
+    game = TicTacToe::Game.new(session[:player1_mark],
+                               session[:player2_mark],
+                               session[:current_player_mark],
+                               board)
     move = params[:move].to_i
     game.take_turn(move)
-
-    p params[:move]
-    p game.board_to_array
 
     if game.over?
       session[:moves] = game.board_to_array
