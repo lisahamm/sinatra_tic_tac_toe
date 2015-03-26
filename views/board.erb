@@ -8,8 +8,8 @@
               <input id="cell-btn" type="submit" value="___" />
             </form>
           <% else %>
-            <form action="/make_move" method="POST">
-              <input id="cell-btn" type="submit" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
+            <form action="/make_move" >
+              <input id="cell-btn" type="button" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
             </form>
           <% end %>
         </form>
