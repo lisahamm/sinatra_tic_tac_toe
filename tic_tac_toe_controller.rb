@@ -7,14 +7,15 @@ require './lib/database_helpers'
 require 'sequel'
 
 class TicTacToeController < Sinatra::Base
-  configure do
-    enable :sessions
-    set :session_secret, ENV['SESSION_SECRET'] || 'session secret'
-  end
-
   use Rack::Flash
   include GameHelpers
   include DatabaseHelpers
+
+  configure do
+    enable :sessions
+    set :session_secret, ENV['SESSION_SECRET'] || 'session secret'
+    DB = Sequel.connect(ENV['DATABASE_URL'] || 'postgres://localhost/tictactoe')
+  end
 
   get '/' do
     session.clear
@@ -67,7 +68,6 @@ class TicTacToeController < Sinatra::Base
 
   get '/game_over' do
 
-    DB = connect_to_database('postgres://localhost/tictactoe')
     @games = all_games_in_database(DB)
     args = {:player1_mark => session[:player1_mark],
             :player2_mark => session[:player2_mark],
