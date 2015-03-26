@@ -122,7 +122,7 @@ describe 'The TicTacToe App' do
     end
 
     it "displays all completed games" do
-      expect(last_response.body).to include "ID:"
+      expect(last_response.body).to include "<td>"
     end
   end
 end
