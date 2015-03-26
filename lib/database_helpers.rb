@@ -2,10 +2,6 @@ require 'sequel'
 
 module DatabaseHelpers
 
-  def connect_to_database(path)
-    Sequel.connect(path)
-  end
-
   def all_games_in_database(database)
     database[:games]
   end
