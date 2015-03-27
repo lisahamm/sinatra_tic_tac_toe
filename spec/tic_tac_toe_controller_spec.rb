@@ -11,9 +11,6 @@ describe 'The TicTacToe App' do
   let(:setup_data) {{player_mark: "X", computer_opponent: "no", player_order: "first"}}
   let(:incomplete_setup_data) {{computer_opponent: "no", player_order: "first"}}
 
-    CONFIG = YAML.load(File.open('config/database.yml'))
-    DB = Sequel.connect('CONFIG[ENV['RACK_ENV']]')
-
 
   def app
     TicTacToeController
