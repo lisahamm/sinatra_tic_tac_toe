@@ -5,6 +5,7 @@ require './lib/game_setup'
 require './lib/game_helpers'
 require './lib/database_helpers'
 require 'sequel'
+require 'yaml'
 
 class TicTacToeController < Sinatra::Base
   use Rack::Flash

@@ -1,0 +1,13 @@
+test:
+  adapter: postgres
+  host: localhost
+  database: tictactoe_test
+
+development:
+  adapter: postgres
+  host: localhost
+  database: tictactoe
+
+
+
+

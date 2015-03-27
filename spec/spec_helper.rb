@@ -13,3 +13,6 @@ $:.unshift(spec) unless $:.include?(spec)
 RSpec.configure do |conf|
   conf.include Rack::Test::Methods
 end
+
+CONFIG = YAML::load(File.open('config/template.yml'))
+CONFIG[ENV['RACK_ENV']]
