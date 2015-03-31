@@ -16,7 +16,7 @@ describe 'GameSetup' do
   it "initializes the game" do
     setup = GameSetup.new(params)
     setup.configure_specifications!
-    game = setup.create_game
+    game = setup.create_game!
     expect(game.nil?).to eq false
     expect(game.ai_mark).to eq "O"
   end

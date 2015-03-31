@@ -15,9 +15,12 @@ class GameSetup
     options[:ai_mark] = setup_computer_opponent(user_input, options[:player_marks])
   end
 
-  def create_game
+  def create_game!
+    configure_specifications!
     TicTacToe::Game.new(options)
   end
+
+  private
 
   def setup_player_marks(player_order, player_mark)
     if player_order == 'first'
