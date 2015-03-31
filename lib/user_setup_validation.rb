@@ -1,5 +1,5 @@
-module UserSetupValidation
-    attr_reader :errors
+class UserSetupValidation
+  attr_reader :errors
 
   def initialize(setup)
     @setup = setup
