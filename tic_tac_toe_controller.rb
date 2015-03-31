@@ -3,18 +3,23 @@ require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/game_setup'
 require './lib/game_helpers'
-require './lib/database_helpers'
+require './lib/database'
 require 'sequel'
+require 'yaml'
+
+ENV['RACK_ENV'] ||= 'development'
 
 class TicTacToeController < Sinatra::Base
   use Rack::Flash
   include GameHelpers
-  include DatabaseHelpers
 
   configure do
     enable :sessions
     set :session_secret, ENV['SESSION_SECRET'] || 'session secret'
-    DB = Sequel.connect(ENV['DATABASE_URL'] || 'postgres://localhost/tictactoe')
+    database_yaml_file_path = File.expand_path(File.join(File.dirname(__FILE__), 'config', 'database.yml'))
+    config = YAML.load_file(database_yaml_file_path)
+    puts ENV['RACK_ENV']
+    Database.init!(config[ENV['RACK_ENV']])
   end
 
   get '/' do
@@ -68,14 +73,14 @@ class TicTacToeController < Sinatra::Base
 
   get '/game_over' do
 
-    @games = all_games_in_database(DB)
-    args = {:player1_mark => session[:player1_mark],
+    game_hash = {:player1_mark => session[:player1_mark],
             :player2_mark => session[:player2_mark],
             :computer_player_mark => session[:computer_opponent],
-            :moves => moves_to_string(session[:moves])}
+            :moves => moves_to_string(session[:moves]),
+            :time => Time.now}
 
-    save_game(@games, args)
-
+    Database.save_game(game_hash)
+    @games = Database.games
     @board = array_to_board(session[:moves])
     erb :game_over
   end

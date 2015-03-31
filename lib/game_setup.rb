@@ -1,50 +1,44 @@
+require 'tic_tac_toe'
+
 class GameSetup
-  attr_reader :errors
+  attr_accessor :user_input, :rules, :options
 
-  def initialize(setup)
-    @setup = setup
-    @errors = {}
+  def initialize(params)
+    @user_input = params
+    @rules = TicTacToe::Rules.new
   end
 
-  def valid?
-    run_validations
-    errors.empty?
+  def configure_specifications!
+    @options = {}
+    options[:player_marks] = setup_player_marks(user_input[:player_order], user_input[:player_mark])
+    options[:current_player_mark] = options[:player_marks].first
+    options[:ai_mark] = setup_computer_opponent(user_input, options[:player_marks])
   end
 
-  def invalid?
-    !valid?
+  def create_game
+    TicTacToe::Game.new(options)
   end
 
-  private
-
-  def run_validations
-    validate(:player_mark)
-    validate(:computer_opponent)
-    validate(:player_order)
-  end
-
-  def validate(key)
-    if valid_options[key].include?(@setup[key])
-      true
+  def setup_player_marks(player_order, player_mark)
+    if player_order == 'first'
+      [player_mark, opponent_mark(player_mark)]
     else
-      self.errors[key] = message_options[key]
-      false
+      [opponent_mark(player_mark), player_mark]
     end
   end
 
-  def valid_options
-    {
-      player_mark: ["X", "O"],
-      computer_opponent: ["yes", "no"],
-      player_order: ["first", "second"]
-    }
+  def valid_player_marks
+    rules.player_marks
   end
 
-  def message_options
-    {
-      player_mark: "Please select a mark to continue",
-      computer_opponent: "Please indicate if you would like to play against the computer",
-      player_order: "Please select if you would like to go first or second"
-    }
+  def opponent_mark(player_mark)
+    valid_player_marks.select {|valid_mark| valid_mark != player_mark}.first
   end
+
+  def setup_computer_opponent(user_input, player_marks)
+    if user_input[:computer_opponent] == "yes"
+      user_input[:player_order] == "first" ? player_marks[1] : player_marks[0]
+    end
+  end
+
 end
