@@ -49,9 +49,8 @@ describe 'The TicTacToe App' do
 
   describe "GET /game" do
     it "loads a game without any moves" do
-      get '/game', {}, {'rack.session' => {:computer_opponent => "O",
-                                       :player1_mark => "X",
-                                       :player2_mark => "O",
+      get '/game', {}, {'rack.session' => {:ai_mark => "O",
+                                       :player_marks => ["X", "O"],
                                        :current_player_mark => "X",
                                        :moves => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
@@ -61,9 +60,8 @@ describe 'The TicTacToe App' do
 
 
     it "loads the game with a move" do
-      get '/game', {}, {'rack.session' => {:computer_opponent => "O",
-                                       :player1_mark => "X",
-                                       :player2_mark => "O",
+      get '/game', {}, {'rack.session' => {:ai_mark => "O",
+                                       :player_marks => ["X", "O"],
                                        :current_player_mark => "X",
                                        :moves => ["X", nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response).to be_ok
@@ -79,14 +77,14 @@ describe 'The TicTacToe App' do
       @mock_game = instance_double("TicTacToe::Game", :board_to_array => [])
 
       expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
+      expect(@mock_game).to receive(:ai_mark).and_return(nil)
       expect(@mock_game).to receive(:take_turn).with(0)
       expect(@mock_game).to receive(:over?).and_return(false, false)
       expect(@mock_game).to receive(:current_player_mark).and_return("X", "O")
 
       post '/make_move', {:move => '0'}, {'rack.session' => {
-                                     :computer_opponent => nil,
-                                     :player1_mark => "X",
-                                     :player2_mark => "O",
+                                     :ai_mark => nil,
+                                     :player_marks => ["X", "O"],
                                      :current_player_mark => "X",
                                      :moves => [nil, nil, nil, nil, nil, nil, nil, nil, nil]}}
       expect(last_response.redirect?).to eq true
@@ -108,10 +106,10 @@ describe 'The TicTacToe App' do
   describe "GET /game_over" do
     before :each do
       get '/game_over', {}, {'rack.session' => {
-                                     :computer_opponent => nil,
-                                     :player1_mark => "X",
-                                     :player2_mark => "O",
+                                     :ai_mark => nil,
+                                     :player_marks => ["X", "O"],
                                      :current_player_mark => "X",
+                                     :winning_player => "X",
                                      :moves => ["X", "X", "X", "O", "O", nil, nil, nil, nil]}}
     end
 

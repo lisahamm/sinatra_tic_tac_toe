@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'rack-flash'
 require 'tic_tac_toe'
 require './lib/user_setup_validation'
+require './lib/game_setup'
 require './lib/game_helpers'
 require './lib/database'
 require 'sequel'
@@ -30,15 +31,15 @@ class TicTacToeController < Sinatra::Base
   post '/setup' do
     @user_setup = UserSetupValidation.new(params)
     if @user_setup.invalid?
-      flash[:errors] = @setup.errors
+      flash[:errors] = @user_setup.errors
       erb :index
     else
-      game = create_game(params)
-      session[:computer_opponent] = computer_opponent(params, game)
-      check_for_computer_turn(game, session[:computer_opponent])
-      session[:player1_mark] = player_marks(params)[0]
-      session[:player2_mark] = player_marks(params)[1]
+      game_setup = GameSetup.new(params)
+      game = game_setup.create_game!
+      check_for_computer_turn(game)
+      session[:player_marks] = game_setup.options[:player_marks]
       session[:current_player_mark] = game.current_player_mark
+      session[:ai_mark] = game.ai_mark
       session[:moves] = game.board_to_array
       redirect to('/game')
     end
@@ -50,11 +51,12 @@ class TicTacToeController < Sinatra::Base
   end
 
   post '/make_move' do
-    board = array_to_board(session[:moves])
-    game = TicTacToe::Game.new(session[:player1_mark],
-                               session[:player2_mark],
-                               session[:current_player_mark],
-                               board)
+    options = {}
+    options[:player_marks] = session[:player_marks]
+    options[:current_player_mark] = session[:current_player_mark]
+    options[:ai_mark] = session[:ai_mark]
+    options[:board] = array_to_board(session[:moves])
+    game = TicTacToe::Game.new(options)
     move = params[:move].to_i
     game.take_turn(move)
 
@@ -63,11 +65,14 @@ class TicTacToeController < Sinatra::Base
       redirect to('/game_over')
     end
 
-    check_for_computer_turn(game, session[:computer_opponent])
+    check_for_computer_turn(game)
 
     session[:moves] = game.board_to_array
     session[:current_player_mark] = game.current_player_mark
-    redirect to('/game_over') if game.over?
+    if game.over?
+      session[:winning_player] = game.get_winning_player
+      redirect to('/game_over')
+    end
     redirect to('/game')
   end
 
@@ -81,7 +86,7 @@ class TicTacToeController < Sinatra::Base
 
     Database.save_game(game_hash)
     @games = Database.games
-    @board = array_to_board(session[:moves])
+    @winning_player = session[:winning_player]
     erb :game_over
   end
 

@@ -5,8 +5,8 @@ describe 'UserSetupValidation' do
   valid_params = {player_mark: 'X', computer_opponent: 'yes', player_order: 'first'}
   invalid_params = {computer_opponent: 'yes', player_order: 'third'}
 
-  let(:valid_game_setup) {GameSetup.new(valid_params)}
-  let(:invalid_game_setup) {GameSetup.new(invalid_params)}
+  let(:valid_game_setup) {UserSetupValidation.new(valid_params)}
+  let(:invalid_game_setup) {UserSetupValidation.new(invalid_params)}
 
   context 'valid game setup' do
     it 'validates the game configurations' do
