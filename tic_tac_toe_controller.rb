@@ -1,7 +1,7 @@
 require 'sinatra/base'
 require 'rack-flash'
 require 'tic_tac_toe'
-require './lib/game_setup'
+require './lib/user_setup_validation'
 require './lib/game_helpers'
 require './lib/database'
 require 'sequel'
@@ -28,8 +28,8 @@ class TicTacToeController < Sinatra::Base
   end
 
   post '/setup' do
-    @setup = GameSetup.new(params)
-    if @setup.invalid?
+    @user_setup = UserSetupValidation.new(params)
+    if @user_setup.invalid?
       flash[:errors] = @setup.errors
       erb :index
     else
