@@ -19,7 +19,6 @@ class TicTacToeController < Sinatra::Base
     set :session_secret, ENV['SESSION_SECRET'] || 'session secret'
     database_yaml_file_path = File.expand_path(File.join(File.dirname(__FILE__), 'config', 'database.yml'))
     config = YAML.load_file(database_yaml_file_path)
-    puts ENV['RACK_ENV']
     Database.init!(config[ENV['RACK_ENV']])
   end
 
@@ -34,48 +33,21 @@ class TicTacToeController < Sinatra::Base
       flash[:errors] = @user_setup.errors
       erb :index
     else
-      game_setup = GameSetup.new(params)
-      game = game_setup.create_game!
-      check_for_computer_turn(game)
-      time = Time.now
-
-      game_hash = {:player1_mark => game.player1_mark,
-                   :player2_mark => game.player2_mark,
-                   :computer_player_mark => game.ai_mark ,
-                   :moves => moves_to_string(game.board_to_array),
-                   :time => Time.now}
-      Database.save_game(serialize_game_data(game, time))
-      session[:game_id] = Database.find_id_by_time(time)
+      game = GameSetup.new(params).create_game
+      session[:game_id] = Database.save_game(serialize_game_data(game))
       redirect to('/game')
     end
   end
 
   get '/game' do
-    game_data = Database.game_by_id(session[:game_id])
-    moves_array = game_data[:moves].split.map {|move| move == "nil" ? nil : move}
-    @board = array_to_board(moves_array)
+    @board = move_data_to_board(session[:game_id])
     erb :board
   end
 
   post '/make_move' do
-    options = {}
-    options[:player_marks] = session[:player_marks]
-    options[:current_player_mark] = session[:current_player_mark]
-    options[:ai_mark] = session[:ai_mark]
-    options[:board] = array_to_board(session[:moves])
-    game = TicTacToe::Game.new(options)
-    move = params[:move].to_i
-    game.take_turn(move)
-
-    if game.over?
-      session[:moves] = game.board_to_array
-      redirect to('/game_over')
-    end
-
-    check_for_computer_turn(game)
-
-    session[:moves] = game.board_to_array
-    session[:current_player_mark] = game.current_player_mark
+    game = recreate_game(session[:game_id])
+    game.take_turn(params[:move].to_i)
+    make_move_database_update(session[:game_id], game)
     if game.over?
       session[:winning_player] = game.get_winning_player
       redirect to('/game_over')
@@ -84,14 +56,6 @@ class TicTacToeController < Sinatra::Base
   end
 
   get '/game_over' do
-
-    game_hash = {:player1_mark => session[:player1_mark],
-            :player2_mark => session[:player2_mark],
-            :computer_player_mark => session[:computer_opponent],
-            :moves => moves_to_string(session[:moves]),
-            :time => Time.now}
-
-    Database.save_game(game_hash)
     @games = Database.games
     @winning_player = session[:winning_player]
     erb :game_over
