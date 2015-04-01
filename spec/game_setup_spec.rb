@@ -6,7 +6,6 @@ describe 'GameSetup' do
 
   it "configures the setup options" do
     setup = GameSetup.new(params)
-    p setup.user_input
     setup.configure_specifications!
     expect(setup.options[:player_marks]).to eq ["X", "O"]
     expect(setup.options[:current_player_mark]).to eq "X"
