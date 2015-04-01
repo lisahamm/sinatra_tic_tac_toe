@@ -19,6 +19,11 @@ module Database
       @database[:games].insert(game_hash)
     end
 
+    def find_id_by_time(time)
+      game = @database[:games][time: time]
+      game[:id]
+    end
+
     private
 
     def build_database_url(config)
