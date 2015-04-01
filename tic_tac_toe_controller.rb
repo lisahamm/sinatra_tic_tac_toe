@@ -37,16 +37,23 @@ class TicTacToeController < Sinatra::Base
       game_setup = GameSetup.new(params)
       game = game_setup.create_game!
       check_for_computer_turn(game)
-      session[:player_marks] = game_setup.options[:player_marks]
-      session[:current_player_mark] = game.current_player_mark
-      session[:ai_mark] = game.ai_mark
-      session[:moves] = game.board_to_array
+      time = Time.now
+
+      game_hash = {:player1_mark => game.player1_mark,
+                   :player2_mark => game.player2_mark,
+                   :computer_player_mark => game.ai_mark ,
+                   :moves => moves_to_string(game.board_to_array),
+                   :time => Time.now}
+      Database.save_game(serialize_game_data(game, time))
+      session[:game_id] = Database.find_id_by_time(time)
       redirect to('/game')
     end
   end
 
   get '/game' do
-    @board = array_to_board(session[:moves])
+    game_data = Database.game_by_id(session[:game_id])
+    moves_array = game_data[:moves].split.map {|move| move == "nil" ? nil : move}
+    @board = array_to_board(moves_array)
     erb :board
   end
 
