@@ -19,9 +19,12 @@ module Database
       @database[:games].insert(game_hash)
     end
 
-    def find_id_by_time(time)
-      game = @database[:games][time: time]
-      game[:id]
+    def update_game_moves(id, moves)
+      @database[:games].where('id = ?', id).update(:moves => moves)
+    end
+
+    def update_game_current_player(id, current_player_mark)
+      @database[:games].where('id = ?', id).update(:current_player_mark => current_player_mark)
     end
 
     private
