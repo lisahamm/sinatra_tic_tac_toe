@@ -11,12 +11,13 @@ module DatabaseHelpers
   end
 
   def make_move_database_update(game_id, game)
-    moves = moves_to_string(game.board_to_array))
+    moves = moves_to_string(game.board_to_array)
     Database.update_after_turn(game_id, moves, game.current_player_mark)
   end
 
   def move_data_to_board(game_id)
-    array_to_board(unserialize_move_data(game_id))
+    move_array = unserialize_move_data(game_id)
+    array_to_board(move_array)
   end
 
   def unserialize_move_data(game_id)
