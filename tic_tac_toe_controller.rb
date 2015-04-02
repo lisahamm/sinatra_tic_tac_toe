@@ -5,6 +5,7 @@ require './lib/user_setup_validation'
 require './lib/game_setup'
 require './lib/game_helpers'
 require './lib/database'
+require './lib/database_helpers'
 require 'sequel'
 require 'yaml'
 
