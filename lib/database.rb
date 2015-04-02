@@ -7,16 +7,16 @@ module Database
       @database = Sequel.connect(database_url)
     end
 
+    def save_game(game_hash)
+      @database[:games].insert(game_hash)
+    end
+
     def games
       @database[:games]
     end
 
     def game_by_id(id)
       @database[:games][id: id]
-    end
-
-    def save_game(game_hash)
-      @database[:games].insert(game_hash)
     end
 
     def update_game_moves(id, moves)
