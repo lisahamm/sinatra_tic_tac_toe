@@ -7,26 +7,20 @@ require 'database_cleaner'
 require 'sequel'
 
 describe 'Database' do
-  RSpec.configure do |config|
-    config.before(:suite) do
-      DatabaseCleaner[:sequel, {:connection => Sequel.connect('postgres://localhost/tictactoe_test')}]
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation)
-    end
 
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
+  let(:game_hash) {{:player1_mark => "X",
+                :player2_mark => "O",
+                :current_player_mark => "X",
+                :computer_player_mark => "O",
+                :moves => "nil nil nil nil nil nil nil nil nil",
+                :time => Time.now}}
 
-    config.after(:each) do
-      DatabaseCleaner.clean
+  describe '#init!' do
+    it "connects to the database" do
+      database_yaml_file_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'database.yml'))
+      config = YAML.load_file(database_yaml_file_path)
+      expect(Database.init!(config[ENV['RACK_ENV']]).class).to eq Sequel::Postgres::Database
     end
-  end
-
-  before :each do
-    database_yaml_file_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'database.yml'))
-    config = YAML.load_file(database_yaml_file_path)
-    Database.init!(config[ENV['RACK_ENV']])
   end
 
   describe '#games' do
@@ -35,25 +29,21 @@ describe 'Database' do
     end
 
     it "returns all games saved in the database" do
-      game_hash = {:player1_mark => "X",
-                   :player2_mark => "O",
-                   :current_player_mark => "X",
-                   :computer_player_mark => "O",
-                   :moves => "nil nil nil nil nil nil nil nil nil",
-                   :time => Time.now}
       Database.save_game(game_hash)
       expect(Database.games.count).to eq 1
     end
   end
 
+  describe '#save_game' do
+    it "stores game data in the database's game table" do
+      Database.save_game(game_hash)
+      Database.save_game(game_hash)
+      expect(Database.games.count).to eq 2
+    end
+  end
+
   describe '#game_by_id(id)' do
     it "retrieves game data from database for a game with the specified id" do
-      game_hash = {:player1_mark => "X",
-                   :player2_mark => "O",
-                   :current_player_mark => "X",
-                   :computer_player_mark => "O",
-                   :moves => "nil nil nil nil nil nil nil nil nil",
-                   :time => Time.now}
       id = Database.save_game(game_hash)
       game_data = Database.game_by_id(id)
       expect(game_data[:id]).to eq id
@@ -62,18 +52,16 @@ describe 'Database' do
     end
   end
 
-  describe '#save_game' do
-
+  describe '#update_after_turn' do
+    it "updates moves and current player for game record in database with specified id" do
+      id = Database.save_game(game_hash)
+      game_data = Database.game_by_id(id)
+      expect(game_data[:moves]).to eq "nil nil nil nil nil nil nil nil nil"
+      expect(game_data[:current_player_mark]).to eq "X"
+      Database.update_after_turn(id, "X nil nil nil nil nil nil nil nil", "O")
+      updated_game_data = Database.game_by_id(id)
+      expect(updated_game_data[:moves]).to eq "X nil nil nil nil nil nil nil nil"
+      expect(updated_game_data[:current_player_mark]).to eq "O"
+    end
   end
-
-  describe '#update_game_moves' do
-
-  end
-
-  describe '#update_game_current_player' do
-
-  end
-
-
 end
-
