@@ -13,6 +13,7 @@ ENV['RACK_ENV'] ||= 'development'
 class TicTacToeController < Sinatra::Base
   use Rack::Flash
   include GameHelpers
+  include DatabaseHelpers
 
   configure do
     enable :sessions
