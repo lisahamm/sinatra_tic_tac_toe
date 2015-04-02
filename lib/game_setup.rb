@@ -8,14 +8,6 @@ class GameSetup
     @player_mark_options = player_mark_options
   end
 
-  def configure_specifications
-    options = {}
-    options[:player_marks] = setup_player_marks(user_input[:player_order], user_input[:player_mark])
-    options[:current_player_mark] = options[:player_marks].first
-    options[:ai_mark] = setup_computer_opponent(user_input, options[:player_marks])
-    options
-  end
-
   def create_game
     game = TicTacToe::Game.new(configure_specifications)
     check_for_computer_turn(game)
@@ -23,6 +15,14 @@ class GameSetup
   end
 
   private
+
+  def configure_specifications
+    options = {}
+    options[:player_marks] = setup_player_marks(user_input[:player_order], user_input[:player_mark])
+    options[:current_player_mark] = options[:player_marks].first
+    options[:ai_mark] = setup_computer_opponent(user_input, options[:player_marks])
+    options
+  end
 
   def setup_player_marks(player_order, player_mark)
     if player_order == 'first'
