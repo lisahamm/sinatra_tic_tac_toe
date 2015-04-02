@@ -7,7 +7,6 @@ require 'database_cleaner'
 require 'sequel'
 
 describe 'Database' do
-
   let(:game_hash) {{:player1_mark => "X",
                 :player2_mark => "O",
                 :current_player_mark => "X",
