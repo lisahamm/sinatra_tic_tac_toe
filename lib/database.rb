@@ -19,12 +19,8 @@ module Database
       @database[:games][id: id]
     end
 
-    def update_game_moves(id, moves)
-      @database[:games].where('id = ?', id).update(:moves => moves)
-    end
-
-    def update_game_current_player(id, current_player_mark)
-      @database[:games].where('id = ?', id).update(:current_player_mark => current_player_mark)
+    def update_after_turn(id, moves, current_player_mark)
+      @database[:games].where('id = ?', id).update(:moves => moves, :current_player_mark => current_player_mark)
     end
 
     private

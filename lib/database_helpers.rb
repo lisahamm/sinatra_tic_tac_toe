@@ -11,8 +11,8 @@ module DatabaseHelpers
   end
 
   def make_move_database_update(game_id, game)
-    Database.update_game_moves(game_id, moves_to_string(game.board_to_array))
-    Database.update_game_current_player(game_id, game.current_player_mark)
+    moves = moves_to_string(game.board_to_array))
+    Database.update_after_turn(game_id, moves, game.current_player_mark)
   end
 
   def move_data_to_board(game_id)
