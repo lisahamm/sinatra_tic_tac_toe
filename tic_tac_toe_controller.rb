@@ -58,9 +58,21 @@ class TicTacToeController < Sinatra::Base
   end
 
   get '/game_over' do
-    @games = Database.games
+    @games = Database.completed_games
     @winning_player = session[:winning_player]
     erb :game_over
+  end
+
+  get '/game/:id' do
+    @id = params[:id]
+    @game = recreate_game(@id)
+    @board = @game.board
+    if @game.over?
+      erb :completed_board
+    else
+      session[:game_id] = @id
+      erb :board
+    end
   end
 
   run! if app_file == $0
