@@ -1,0 +1,27 @@
+<div>
+  <p>Completed Game <%= @id %></p>
+  <% if @game.tie? %>
+    <p>Result: tie game</p>
+  <% else %>
+    <p>Result: Player <%= @game.get_winning_player %> won</p>
+  <% end %>
+</div>
+
+<div class="board">
+  <% @board.each_row do |row| %>
+    <div class="row">
+      <% row.each do |cell| %>
+          <% if (cell.symbol == nil) %>
+            <form>
+              <input id="cell-btn" type="button" value="___" readonly />
+            </form>
+          <% else %>
+            <form >
+              <input id="cell-btn" type="button" name="<%= cell.index %>" value=" <%= cell.symbol %> " readonly />
+            </form>
+          <% end %>
+        </form>
+      <% end %>
+    </div>
+  <% end %>
+</div>
