@@ -15,12 +15,18 @@ module Database
       @database[:games]
     end
 
+    def completed_games
+      @database[:games].where('completed = true')
+    end
+
     def game_by_id(id)
       @database[:games][id: id]
     end
 
-    def update_after_turn(id, moves, current_player_mark)
-      @database[:games].where('id = ?', id).update(:moves => moves, :current_player_mark => current_player_mark)
+    def update_after_turn(id, moves, current_player_mark, completed)
+      @database[:games].where('id = ?', id).update(:moves => moves,
+                                                   :current_player_mark => current_player_mark,
+                                                   :completed => completed)
     end
 
     private
