@@ -23,7 +23,7 @@
         </tr>
         <% @games.each do |row| %>
           <tr>
-            <td><%= row[:id] %> </td>
+            <td><a href="/game/<%=row[:id]%>" ><%= row[:id] %></a></td>
             <td><%= row[:player1_mark] %> </td>
             <td><%= row[:player2_mark] %> </td>
             <td><%= row[:moves] %></td>
