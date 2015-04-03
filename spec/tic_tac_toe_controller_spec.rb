@@ -81,6 +81,27 @@ describe 'The TicTacToe App' do
     end
   end
 
+  describe "GET /game/:id" do
+    it "displays game information for a game with the specified id" do
+      game_data = {:id=>350,
+                   :player1_mark=>"X",
+                   :player2_mark=>"O",
+                   :current_player_mark=>"X",
+                   :computer_player_mark=>"O",
+                   :moves=>"nil X X nil nil nil nil nil nil",
+                   :time=>"2015-04-02 15:58:29 -0500"}
+
+      allow(Database).to receive(:game_by_id).and_return(game_data)
+
+      get '/game', {}, {'rack.session' => {:game_id => 350}}
+
+      expect(last_response).to be_ok
+      expect(last_response.status).to eq 200
+      expect(last_response.body).to include 'name="0" value=" X " readonly'
+
+    end
+  end
+
 
   describe "POST /make_move" do
 
@@ -102,7 +123,7 @@ describe 'The TicTacToe App' do
 
       expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
       expect(@mock_game).to receive(:take_turn).with(0)
-      expect(@mock_game).to receive(:over?).and_return(false)
+      expect(@mock_game).to receive(:over?).and_return(false, false)
       expect(@mock_game).to receive(:current_player_mark)
 
       post '/make_move', {:move => '0'}, {'rack.session' => {:game_id => 350}}
@@ -128,7 +149,7 @@ describe 'The TicTacToe App' do
       expect(@mock_game).to receive(:current_player_mark)
       expect(@mock_game).to receive(:get_winning_player)
 
-      expect(@mock_game).to receive(:over?).and_return true
+      expect(@mock_game).to receive(:over?).and_return(true, true)
 
       post '/make_move', {:move => '0'}, {'rack.session' => {:game_id => 350}}
       expect(last_response.redirect?).to eq true
