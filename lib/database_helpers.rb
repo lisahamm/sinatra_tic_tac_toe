@@ -5,14 +5,16 @@ module DatabaseHelpers
     {:player1_mark => game.player1_mark,
      :player2_mark => game.player2_mark,
      :current_player_mark => game.current_player_mark,
-     :computer_player_mark => game.ai_mark ,
+     :computer_player_mark => game.ai_mark,
      :moves => moves_to_string(game.board_to_array),
+     :completed => game.over?,
      :time => Time.now}
   end
 
   def make_move_database_update(game_id, game)
+    completed = game.over?
     moves = moves_to_string(game.board_to_array)
-    Database.update_after_turn(game_id, moves, game.current_player_mark)
+    Database.update_after_turn(game_id, moves, game.current_player_mark, completed)
   end
 
   def move_data_to_board(game_id)
