@@ -1,5 +1,5 @@
 require 'tic_tac_toe'
-require 'database_helpers'
+require_relative 'database_helpers'
 
 module GameHelpers
   include DatabaseHelpers
