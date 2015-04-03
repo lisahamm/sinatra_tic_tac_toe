@@ -12,6 +12,7 @@ describe 'Database' do
                 :current_player_mark => "X",
                 :computer_player_mark => "O",
                 :moves => "nil nil nil nil nil nil nil nil nil",
+                :completed => false,
                 :time => Time.now}}
 
   describe '#init!' do
@@ -30,6 +31,25 @@ describe 'Database' do
     it "returns all games saved in the database" do
       Database.save_game(game_hash)
       expect(Database.games.count).to eq 1
+    end
+  end
+
+  describe '#completed_games' do
+    it "returns 0 game records when there are no completed games saved in the database" do
+      Database.save_game(game_hash)
+      expect(Database.completed_games.count).to eq 0
+    end
+
+    it "returns 1 game record when there is 1 completed game saved in the database" do
+      completed_game_hash = {:player1_mark => "X",
+                             :player2_mark => "O",
+                             :current_player_mark => "X",
+                             :computer_player_mark => "O",
+                             :moves => "X X X O O nil nil nil nil",
+                             :completed => true,
+                             :time => Time.now}
+      Database.save_game(completed_game_hash)
+      expect(Database.completed_games.count).to eq 1
     end
   end
 
@@ -52,15 +72,20 @@ describe 'Database' do
   end
 
   describe '#update_after_turn' do
-    it "updates moves and current player for game record in database with specified id" do
-      id = Database.save_game(game_hash)
-      game_data = Database.game_by_id(id)
-      expect(game_data[:moves]).to eq "nil nil nil nil nil nil nil nil nil"
-      expect(game_data[:current_player_mark]).to eq "X"
-      Database.update_after_turn(id, "X nil nil nil nil nil nil nil nil", "O")
-      updated_game_data = Database.game_by_id(id)
-      expect(updated_game_data[:moves]).to eq "X nil nil nil nil nil nil nil nil"
+    before :each do
+      @id = Database.save_game(game_hash)
+      @game_data = Database.game_by_id(@id)
+    end
+
+    it "updates moves, current player, and completed status for game record in database with specified id" do
+      expect(@game_data[:moves]).to eq game_hash[:moves]
+      expect(@game_data[:current_player_mark]).to eq game_hash[:current_player_mark]
+      expect(@game_data[:completed]).to eq game_hash[:completed]
+      Database.update_after_turn(@id, "X X X O O nil nil nil nil", "O", true)
+      updated_game_data = Database.game_by_id(@id)
+      expect(updated_game_data[:moves]).to eq "X X X O O nil nil nil nil"
       expect(updated_game_data[:current_player_mark]).to eq "O"
+      expect(updated_game_data[:completed]).to eq true
     end
   end
 end
