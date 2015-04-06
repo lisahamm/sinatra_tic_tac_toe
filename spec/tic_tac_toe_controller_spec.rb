@@ -88,7 +88,7 @@ describe 'The TicTacToe App' do
                    :player2_mark=>"O",
                    :current_player_mark=>"X",
                    :computer_player_mark=>"O",
-                   :moves=>"nil X X nil nil nil nil nil nil",
+                   :moves=>"O X X nil nil nil nil nil nil",
                    :time=>"2015-04-02 15:58:29 -0500"}
 
       allow(Database).to receive(:game_by_id).and_return(game_data)
@@ -97,7 +97,7 @@ describe 'The TicTacToe App' do
 
       expect(last_response).to be_ok
       expect(last_response.status).to eq 200
-      expect(last_response.body).to include 'name="0" value=" X " readonly'
+      expect(last_response.body).to include 'name="1" value=" X " readonly'
 
     end
   end
@@ -167,7 +167,7 @@ describe 'The TicTacToe App' do
                    :moves=>"nil X X nil nil nil nil nil nil",
                    :time=>"2015-04-02 15:58:29 -0500"}]
 
-      allow(Database).to receive(:games).and_return(games_data)
+      allow(Database).to receive(:completed_games).and_return(games_data)
       get '/game_over', {}, {'rack.session' => {:winning_player => "X"}}
     end
 
