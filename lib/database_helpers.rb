@@ -33,5 +33,4 @@ module DatabaseHelpers
     game_data = Database.game_by_id(game_id)
     game_data[:moves].split.map {|move| move == "nil" ? nil : move}
   end
-
 end

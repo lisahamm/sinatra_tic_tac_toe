@@ -10,7 +10,6 @@ describe 'The TicTacToe App' do
   let(:setup_data) {{player_mark: "X", computer_opponent: "no", player_order: "first"}}
   let(:incomplete_setup_data) {{computer_opponent: "no", player_order: "first"}}
 
-
   def app
     TicTacToeController
   end
@@ -102,9 +101,7 @@ describe 'The TicTacToe App' do
     end
   end
 
-
   describe "POST /make_move" do
-
     it "adds a human player's mark to the board" do
       game_data = {:id=>350,
                    :player1_mark=>"X",
@@ -117,10 +114,7 @@ describe 'The TicTacToe App' do
       allow(Database).to receive(:game_by_id).and_return(game_data)
       allow(Database).to receive(:update_after_turn)
 
-
-
       @mock_game = instance_double("TicTacToe::Game", :board_to_array => [])
-
       expect(TicTacToe::Game).to receive(:new).and_return(@mock_game)
       expect(@mock_game).to receive(:take_turn).with(0)
       expect(@mock_game).to receive(:over?).and_return(false, false)
@@ -148,7 +142,6 @@ describe 'The TicTacToe App' do
       expect(@mock_game).to receive(:take_turn).with(0)
       expect(@mock_game).to receive(:current_player_mark)
       expect(@mock_game).to receive(:get_winning_player)
-
       expect(@mock_game).to receive(:over?).and_return(true, true)
 
       post '/make_move', {:move => '0'}, {'rack.session' => {:game_id => 350}}

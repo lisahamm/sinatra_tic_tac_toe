@@ -31,6 +31,4 @@ describe 'GameHelpers' do
       expect(board.cells.length).to eq 9
     end
   end
-
-
 end

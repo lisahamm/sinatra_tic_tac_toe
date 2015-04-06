@@ -24,5 +24,4 @@ module GameHelpers
       ai_mark: game_data[:computer_player_mark]
     }
   end
-
 end
