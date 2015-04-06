@@ -7,9 +7,10 @@ describe 'GameHelpers' do
   include GameHelpers
   include DatabaseHelpers
 
+  let(:game) {TicTacToe::Game.new({player_marks: ["X", "O"], current_player_mark: "X", ai_mark: "O"})}
+
   describe '#serialize_game_data' do
     it "formats data from the Game object to be stored in the database" do
-      game = TicTacToe::Game.new({player_marks: ["X", "O"], current_player_mark: "X", ai_mark: "O"})
       game_data = serialize_game_data(game)
       expect(game_data[:player1_mark]).to eq "X"
       expect(game_data[:player2_mark]).to eq "O"
