@@ -22,13 +22,16 @@ module DatabaseHelpers
     array_to_board(move_array)
   end
 
-  def unserialize_move_data(game_id)
-    game_data = Database.game_by_id(game_id)
-    game_data[:moves].split.map {|move| move == "nil" ? nil : move}
-  end
+  private
 
   def moves_to_string(moves_array)
     moves = moves_array.map {|move| move == nil ? "nil" : move}
     moves.reduce("") {|string, move| string << (move + " ")}.strip
   end
+
+  def unserialize_move_data(game_id)
+    game_data = Database.game_by_id(game_id)
+    game_data[:moves].split.map {|move| move == "nil" ? nil : move}
+  end
+
 end
